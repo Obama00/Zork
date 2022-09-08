@@ -35,7 +35,7 @@ namespace Zork
                         case Commands.SOUTH:
                         case Commands.EAST:
                         case Commands.WEST:
-                            if (Move(Commands))
+                            if (Move(command))
                             {
                                 outputString = $"You moved {command}.";
                             }
@@ -80,7 +80,7 @@ namespace Zork
             return didMove;
         }
 
-        private static string[] _rooms = { "Forest", "West of house", "Behind House", "Behind House", "Clearing", "Canyon View" };
+        private static string[] _rooms = { "Forest", "West of house", "Behind House", "Clearing", "Canyon View" };
         private static int _currentRoom = 1;
 
     }
