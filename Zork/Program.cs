@@ -15,6 +15,15 @@ namespace Zork
         }
         static void Main(string[] args)
         {
+            Room westOfHouse = new Room("West Of House");
+            Room southOfHouse = new Room("South Of House");
+
+            List<Room> rooms = null;
+            rooms.Add(westOfHouse);
+            rooms.Add(southOfHouse);
+
+            foreach (Room room in )
+            
             Console.WriteLine("Welcome to Zork!");
 
             Commands command = Commands.UNKNOWN;
