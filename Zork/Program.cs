@@ -31,12 +31,12 @@ namespace Zork
                     Console.Write(">");
                     command = ToCommand(Console.ReadLine().Trim());
 
-                    string outputString;
+                   
                     switch (command)
                     {
                         case Commands.QUIT:
                             isRunning = false;
-                            outputString = "Thank you for playing!";
+                            Console.WriteLine("Thank you for playing!");
                             break;
 
                         case Commands.LOOK:
@@ -47,18 +47,13 @@ namespace Zork
                         case Commands.SOUTH:
                         case Commands.EAST:
                         case Commands.WEST:
-                            if (Move(command))
+                            if (Move(command) == false)
                             {
-                                outputString = $"You moved {command}.";
-                            }
-                            else
-                            {
-                                outputString = "The way is shut";
-                            }
-                            
+                                Console.WriteLine("The way is shut!");               
+                            }                            
                             break;
                         default:
-                            outputString = "Unknown command.";
+                            Console.WriteLine("Unknown Comand");
                             break;
                     };
                 
@@ -88,6 +83,7 @@ namespace Zork
                     break;
                 case Commands.WEST when Location.Column > 0:
                     Location.Column--;
+                    didMove = true;
                    
                     break;
             }
