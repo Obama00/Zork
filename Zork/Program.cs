@@ -17,13 +17,11 @@ namespace Zork
         {
             Console.WriteLine("Welcome to Zork!");
             InitializeRoomDescriptions();
-
             Room previousRoom = null;
             Commands command = Commands.UNKNOWN;
             bool isRunning = true;
             while (isRunning)
             {
-
                 while (command != Commands.QUIT)
                 {
                     Console.WriteLine(CurrentRoom);
@@ -34,39 +32,37 @@ namespace Zork
                     }
                     Console.Write(">");
                     command = ToCommand(Console.ReadLine().Trim());
-
-
+                    string outputString;
                     switch (command)
                     {
                         case Commands.QUIT:
                             isRunning = false;
-                            Console.WriteLine("Thank you for playing!");
+                            outputString = "Thank you for playing!";
                             break;
-
                         case Commands.LOOK:
-                            Console.WriteLine(CurrentRoom.Description);
+                            outputString = CurrentRoom.Description;
                             break;
-
                         case Commands.NORTH:
                         case Commands.SOUTH:
                         case Commands.EAST:
                         case Commands.WEST:
-                            if (Move(command) == false)
+                            if (Move(command))
                             {
-                                Console.WriteLine("The way is shut!");
+                                outputString = "The way is shut!";
+                            }
+                            else
+                            {
+                                outputString = $"You moved {command}";
                             }
                             break;
                         default:
-                            Console.WriteLine("Unknown Comand");
+                            outputString = "Unknown Command";
                             break;
                     };
-
+                    Console.WriteLine(outputString);
                 }
             }
         }
-
-
-
         private static bool Move(Commands command)
         {
             Assert.IsTrue(IsDirection(command), "Invalid Direction.");
@@ -88,21 +84,18 @@ namespace Zork
                 case Commands.WEST when Location.Column > 0:
                     Location.Column--;
                     didMove = true;
-
                     break;
             }
             return didMove;
         }
 
         private static Commands ToCommand(string commandString) => Enum.TryParse(commandString, true, out Commands result) ? result : Commands.UNKNOWN;
-
         private static bool IsDirection(Commands command) => Directions.Contains(command);
 
         private static readonly Room[,] _rooms = {
         {new Room("Rocky Trail"), new Room("South of House"), new Room("Canyon View")},
         {new Room("Forest"), new Room("West of House"), new Room("Behind House") },
         {new Room("Dense Woods"), new Room("North of House"), new Room("Clearing") } };
-
 
         private static readonly List<Commands> Directions = new List<Commands>
     {
