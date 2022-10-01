@@ -10,7 +10,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Rooms.txt">
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Rooms.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Rooms2.txt">
