@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "9b73NPwZJxjL3KvFd95HjGEMayYTP9cN9EJ7tly7qA4aQwII3QEI5M5TsqZ1Qpbu715FjYSX/26OCYxKgVsLTg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ke423139\\Documents\\GitHub\\Zork\\Zork.Cli\\Zork.Cli.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ke423139\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
