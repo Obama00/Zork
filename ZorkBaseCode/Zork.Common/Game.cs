@@ -76,9 +76,7 @@ namespace Zork.Common
                         outputString = Player.CurrentRoom.Description;
                         foreach (Item item in Player.CurrentRoom.Inventory)
                         {
-
                             outputString += item.Description;
-
                         }
 
                         break;
@@ -100,14 +98,11 @@ namespace Zork.Common
 
                     case Commands.Take:
                         Player.Take(subject);
-                        //TODO
-
                         outputString = "Taken";
                         break;
 
                     case Commands.Drop:
                         Player.Drop(subject);
-                        //TODO
                         outputString = "Dropped";
                         break;
 

@@ -82,7 +82,6 @@ namespace Zork.Common
             else
             {
                 AddItemToInventory(itemToTake);
-                
                 CurrentRoom.RemoveItemFromInventory(itemToTake);
             }
         }
@@ -121,8 +120,6 @@ namespace Zork.Common
             }
             else
             {
-
-                
                 CurrentRoom.AddItemToInventory(itemToDrop);
                 RemoveItemFromInventory(itemToDrop);
             }
