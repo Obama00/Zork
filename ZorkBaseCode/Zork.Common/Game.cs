@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Zork.Common
 {
@@ -6,9 +7,9 @@ namespace Zork.Common
     {
         public World World { get; }
 
-        public Player Player { get; }
+        public  Player Player { get;  }
 
-        public IOutputService Output { get; private set; }
+        public static IOutputService Output { get;  set; }
 
         public Game(World world, string startingLocation)
         {
@@ -18,6 +19,7 @@ namespace Zork.Common
 
         public void Run(IOutputService output)
         {
+            
             Output = output;
 
             Room previousRoom = null;
@@ -28,6 +30,12 @@ namespace Zork.Common
                 if (previousRoom != Player.CurrentRoom)
                 {
                     Output.WriteLine(Player.CurrentRoom.Description);
+                    foreach (Item item in Player.CurrentRoom.Inventory)
+                    {
+
+                        Output.WriteLine(item.Description);
+
+                    }
                     previousRoom = Player.CurrentRoom;
                 }
 
@@ -54,9 +62,9 @@ namespace Zork.Common
                     verb = commandTokens[0];
                     subject = commandTokens[1];
                 }
-
+                
                 Commands command = ToCommand(verb);
-                string outputString;
+                string  outputString;
                 switch (command)
                 {
                     case Commands.Quit:
@@ -66,6 +74,13 @@ namespace Zork.Common
 
                     case Commands.Look:
                         outputString = Player.CurrentRoom.Description;
+                        foreach (Item item in Player.CurrentRoom.Inventory)
+                        {
+                           
+                            outputString += item.Description;
+                            
+                        }
+
                         break;
 
                     case Commands.North:
@@ -84,19 +99,29 @@ namespace Zork.Common
                         break;
 
                     case Commands.Take:
+                        Player.Take(subject);
                         //TODO
+
                         outputString = null;
                         break;
 
                     case Commands.Drop:
+                        Player.Drop(subject);
                         //TODO
                         outputString = null;
                         break;
 
                     case Commands.Inventory:
-                        //TODO
                         outputString = null;
+                        foreach (Item item in Player.Inventory)
+                        {
+
+                            outputString = item.Description;
+
+                        }
+
                         break;
+                        
 
                     default:
                         outputString = "Unknown command.";

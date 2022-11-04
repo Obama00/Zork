@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
+
 namespace Zork.Common
 {
     public class Room
     {
+       
         public string Name { get; }
 
         public string Description { get; set; }
@@ -16,7 +18,7 @@ namespace Zork.Common
         private Dictionary<Directions, string> NeighborNames { get; set; }
 
         [JsonIgnore]
-        public List<Item> Inventory { get; private set; }
+        public   List<Item> Inventory { get;  set; }
 
         [JsonProperty]
         private string[] InventoryNames { get; set; }
@@ -81,6 +83,38 @@ namespace Zork.Common
             InventoryNames = null;
         }
 
+        public  void RemoveItemFromInventory(Item itemToRemove)
+        {
+            Item takenItem = null;
+            foreach (Item item in Inventory)
+            {
+                if (string.Compare(item.Name, itemToRemove.Name, ignoreCase: true) == 0)
+                {
+                    takenItem = item;
+                    Inventory.Remove(itemToRemove);
+                    break;
+                }
+               
+            }
+            
+        }
+         public void AddItemToInventory(Item itemToAdd)
+        {
+            
+            Item takenItem = null;
+            foreach (Item item in Player.Inventory)
+            {
+                if (string.Compare(item.Name, itemToAdd.Name, ignoreCase: true) == 0)
+                {
+                    takenItem = item;
+                    Inventory.Add(itemToAdd);
+                    break;
+                }
+
+            }
+        }
+
         public override string ToString() => Name;
+        
     }
 }
