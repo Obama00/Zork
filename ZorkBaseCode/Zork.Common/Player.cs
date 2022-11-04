@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace Zork.Common
 {
-     public class Player
+    public class Player
     {
-        
+
 
         public Room CurrentRoom
         {
@@ -14,10 +14,10 @@ namespace Zork.Common
             set => _currentRoom = value;
         }
 
-       static public  List<Item> Inventory { get;   set; }
+        static public List<Item> Inventory { get; set; }
 
         [JsonIgnore]
-        public Dictionary <string, Item> InventoryByName { get; }
+        public Dictionary<string, Item> InventoryByName { get; }
 
         public Player(World world, string startingLocation)
         {
@@ -30,11 +30,11 @@ namespace Zork.Common
 
             Inventory = new List<Item>();
             InventoryByName = new Dictionary<string, Item>(StringComparer.OrdinalIgnoreCase);
-            foreach(Item item in Inventory)
+            foreach (Item item in Inventory)
             {
                 InventoryByName.Add(item.Name, item);
             }
-            
+
         }
 
         public bool Move(Directions direction)
@@ -47,14 +47,14 @@ namespace Zork.Common
 
             return didMove;
         }
-         public  void Take(string itemName)
+        public void Take(string itemName)
         {
-           
+
             Item itemToTake = null;
-            
+
             foreach (Item item in World.Items)
             {
-                if (string.Compare(item.Name, itemName, ignoreCase: true) ==0)
+                if (string.Compare(item.Name, itemName, ignoreCase: true) == 0)
                 {
                     itemToTake = item;
                     break;
@@ -66,7 +66,7 @@ namespace Zork.Common
                 return;
             }
             bool itemIsInRoomInventory = false;
-            foreach(Item item in CurrentRoom.Inventory)
+            foreach (Item item in CurrentRoom.Inventory)
             {
                 if (item == itemToTake)
                 {
@@ -74,7 +74,7 @@ namespace Zork.Common
                     break;
                 }
             }
-            
+
             if (itemIsInRoomInventory == false)
             {
                 Game.Output.WriteLine("I can't see any such thing.");
@@ -82,7 +82,7 @@ namespace Zork.Common
             else
             {
                 AddItemToInventory(itemToTake);
-                Game.Output.WriteLine("Taken");
+                
                 CurrentRoom.RemoveItemFromInventory(itemToTake);
             }
         }
@@ -121,24 +121,24 @@ namespace Zork.Common
             }
             else
             {
+
                 
-                Game.Output.WriteLine("Dropped");
                 CurrentRoom.AddItemToInventory(itemToDrop);
                 RemoveItemFromInventory(itemToDrop);
             }
         }
-            void AddItemToInventory(Item itemToAdd)
+        void AddItemToInventory(Item itemToAdd)
         {
             Item takenItem = null;
-            foreach(Item item in CurrentRoom.Inventory)
+            foreach (Item item in CurrentRoom.Inventory)
             {
-                if (string.Compare(item.Name, itemToAdd.Name, ignoreCase: true) ==0)
+                if (string.Compare(item.Name, itemToAdd.Name, ignoreCase: true) == 0)
                 {
                     takenItem = item;
                     Inventory.Add(itemToAdd);
                     break;
                 }
-               
+
             }
         }
 

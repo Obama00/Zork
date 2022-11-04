@@ -6,7 +6,7 @@ namespace Zork.Common
 {
     public class Room
     {
-       
+
         public string Name { get; }
 
         public string Description { get; set; }
@@ -18,7 +18,7 @@ namespace Zork.Common
         private Dictionary<Directions, string> NeighborNames { get; set; }
 
         [JsonIgnore]
-        public   List<Item> Inventory { get;  set; }
+        public List<Item> Inventory { get; set; }
 
         [JsonProperty]
         private string[] InventoryNames { get; set; }
@@ -83,7 +83,7 @@ namespace Zork.Common
             InventoryNames = null;
         }
 
-        public  void RemoveItemFromInventory(Item itemToRemove)
+        public void RemoveItemFromInventory(Item itemToRemove)
         {
             Item takenItem = null;
             foreach (Item item in Inventory)
@@ -94,13 +94,13 @@ namespace Zork.Common
                     Inventory.Remove(itemToRemove);
                     break;
                 }
-               
+
             }
-            
+
         }
-         public void AddItemToInventory(Item itemToAdd)
+        public void AddItemToInventory(Item itemToAdd)
         {
-            
+
             Item takenItem = null;
             foreach (Item item in Player.Inventory)
             {
@@ -115,6 +115,6 @@ namespace Zork.Common
         }
 
         public override string ToString() => Name;
-        
+
     }
 }

@@ -12,8 +12,8 @@ namespace Zork.Common
         [JsonIgnore]
         public Dictionary<string, Room> RoomsByName { get; }
 
-       static public Item[] Items { get; private set; }
-        
+        static public Item[] Items { get; private set; }
+
         [JsonIgnore]
         public Dictionary<string, Item> ItemsByName { get; }
 

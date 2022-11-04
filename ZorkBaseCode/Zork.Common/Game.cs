@@ -7,9 +7,9 @@ namespace Zork.Common
     {
         public World World { get; }
 
-        public  Player Player { get;  }
+        public Player Player { get; }
 
-        public static IOutputService Output { get;  set; }
+        public static IOutputService Output { get; set; }
 
         public Game(World world, string startingLocation)
         {
@@ -19,7 +19,7 @@ namespace Zork.Common
 
         public void Run(IOutputService output)
         {
-            
+
             Output = output;
 
             Room previousRoom = null;
@@ -43,9 +43,9 @@ namespace Zork.Common
 
                 string inputString = Console.ReadLine().Trim();
                 // might look like:  "LOOK", "TAKE MAT", "QUIT"
-                char  separator = ' ';
+                char separator = ' ';
                 string[] commandTokens = inputString.Split(separator);
-                
+
                 string verb = null;
                 string subject = null;
                 if (commandTokens.Length == 0)
@@ -62,9 +62,9 @@ namespace Zork.Common
                     verb = commandTokens[0];
                     subject = commandTokens[1];
                 }
-                
+
                 Commands command = ToCommand(verb);
-                string  outputString;
+                string outputString;
                 switch (command)
                 {
                     case Commands.Quit:
@@ -76,9 +76,9 @@ namespace Zork.Common
                         outputString = Player.CurrentRoom.Description;
                         foreach (Item item in Player.CurrentRoom.Inventory)
                         {
-                           
+
                             outputString += item.Description;
-                            
+
                         }
 
                         break;
@@ -102,13 +102,13 @@ namespace Zork.Common
                         Player.Take(subject);
                         //TODO
 
-                        outputString = null;
+                        outputString = "Taken";
                         break;
 
                     case Commands.Drop:
                         Player.Drop(subject);
                         //TODO
-                        outputString = null;
+                        outputString = "Dropped";
                         break;
 
                     case Commands.Inventory:
@@ -121,7 +121,7 @@ namespace Zork.Common
                         }
 
                         break;
-                        
+
 
                     default:
                         outputString = "Unknown command.";
