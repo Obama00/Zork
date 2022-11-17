@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace Zork.Common
 {
     public class Player
     {
-
-
         public Room CurrentRoom
         {
             get => _currentRoom;
             set => _currentRoom = value;
         }
 
-        static public List<Item> Inventory { get; set; }
-
-        [JsonIgnore]
-        public Dictionary<string, Item> InventoryByName { get; }
+        public IEnumerable<Item> Inventory => _inventory;
 
         public Player(World world, string startingLocation)
         {
@@ -28,13 +22,7 @@ namespace Zork.Common
                 throw new Exception($"Invalid starting location: {startingLocation}");
             }
 
-            Inventory = new List<Item>();
-            InventoryByName = new Dictionary<string, Item>(StringComparer.OrdinalIgnoreCase);
-            foreach (Item item in Inventory)
-            {
-                InventoryByName.Add(item.Name, item);
-            }
-
+            _inventory = new List<Item>();
         }
 
         public bool Move(Directions direction)
@@ -47,115 +35,27 @@ namespace Zork.Common
 
             return didMove;
         }
-        public void Take(string itemName)
+
+        public void AddItemToInventory(Item itemToAdd)
         {
-
-            Item itemToTake = null;
-
-            foreach (Item item in World.Items)
+            if (_inventory.Contains(itemToAdd))
             {
-                if (string.Compare(item.Name, itemName, ignoreCase: true) == 0)
-                {
-                    itemToTake = item;
-                    break;
-                }
-            }
-            if (itemToTake == null)
-            {
-                Game.Output.WriteLine("No such item exists");
-                return;
-            }
-            bool itemIsInRoomInventory = false;
-            foreach (Item item in CurrentRoom.Inventory)
-            {
-                if (item == itemToTake)
-                {
-                    itemIsInRoomInventory = true;
-                    break;
-                }
+                throw new Exception($"Item {itemToAdd} already exists in inventory.");
             }
 
-            if (itemIsInRoomInventory == false)
-            {
-                Game.Output.WriteLine("I can't see any such thing.");
-            }
-            else
-            {
-                AddItemToInventory(itemToTake);
-                CurrentRoom.RemoveItemFromInventory(itemToTake);
-            }
-        }
-
-        public void Drop(string itemName)
-        {
-
-            Item itemToDrop = null;
-
-            foreach (Item item in World.Items)
-            {
-                if (string.Compare(item.Name, itemName, ignoreCase: true) == 0)
-                {
-                    itemToDrop = item;
-                    break;
-                }
-            }
-            if (itemToDrop == null)
-            {
-                Game.Output.WriteLine("No such item exists");
-                return;
-            }
-            bool itemIsInRoomInventory = false;
-            foreach (Item item in Inventory)
-            {
-                if (item == itemToDrop)
-                {
-                    itemIsInRoomInventory = true;
-                    break;
-                }
-            }
-
-            if (itemIsInRoomInventory == false)
-            {
-                Game.Output.WriteLine("I can't see any such thing.");
-            }
-            else
-            {
-                CurrentRoom.AddItemToInventory(itemToDrop);
-                RemoveItemFromInventory(itemToDrop);
-            }
-        }
-        void AddItemToInventory(Item itemToAdd)
-        {
-            Item takenItem = null;
-            foreach (Item item in CurrentRoom.Inventory)
-            {
-                if (string.Compare(item.Name, itemToAdd.Name, ignoreCase: true) == 0)
-                {
-                    takenItem = item;
-                    Inventory.Add(itemToAdd);
-                    break;
-                }
-
-            }
+            _inventory.Add(itemToAdd);
         }
 
         public void RemoveItemFromInventory(Item itemToRemove)
         {
-            Item takenItem = null;
-            foreach (Item item in Inventory)
+            if (_inventory.Remove(itemToRemove) == false)
             {
-                if (string.Compare(item.Name, itemToRemove.Name, ignoreCase: true) == 0)
-                {
-                    takenItem = item;
-                    Inventory.Remove(itemToRemove);
-                    break;
-                }
-
+                throw new Exception("Could not remove item from inventory.");
             }
-
         }
 
-        private World _world;
+        private readonly World _world;
         private Room _currentRoom;
+        private readonly List<Item> _inventory;
     }
 }
