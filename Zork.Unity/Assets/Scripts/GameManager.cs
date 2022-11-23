@@ -24,12 +24,28 @@ public class GameManager : MonoBehaviour
         _game = JsonConvert.DeserializeObject<Game>(gameJson.text);
         _game.Player.LocationChanged += Player_LocationChanged;
        _game.Run(InputService, OutputService);
+       _game.Player.ScoreChanged += Player_ScoreChanged;
+       _game.Player.MovesChanged += Player_MovesChanged;
         
     }
 
     private void Player_LocationChanged(object sender, Room location)
     {
         LocationText.text = location.Name;
+    }
+
+    private void Player_ScoreChanged(object sender, int Score)
+    {
+       string scoretext = Score.ToString();
+        ScoreText.text = scoretext;
+        
+    }
+
+     private void Player_MovesChanged(object sender, int Moves)
+    {
+       string movetext = Moves.ToString();
+        MovesText.text = movetext;
+        
     }
 
     private void Start()
