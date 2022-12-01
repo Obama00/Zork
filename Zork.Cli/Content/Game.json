@@ -1,6 +1,13 @@
 {
   "StartingLocation": "West of House",
   "World": {
+    "Enemies":[
+       {
+         "Name": "Goblin",
+         "LookDescription": "A goblin stands here ready to battle you.",
+         "Health": 1,
+       }
+    ],
     "Items": [
       {
         "Name": "Mat",
@@ -65,7 +72,10 @@
         "NeighborNames": {
           "South": "Forest 3",
           "East": "West of House"
-        }
+        },
+        "EnemyNames": [
+            "Goblin"
+        ]
       },
       {
         "Name": "Forest 2",

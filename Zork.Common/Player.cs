@@ -90,5 +90,6 @@ namespace Zork.Common
         private readonly List<Item> _inventory;
         public int Score = 0;
         public int Moves = 0;
+        public int Health = 10;
     }
 }

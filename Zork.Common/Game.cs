@@ -155,6 +155,11 @@ namespace Zork.Common
             {
                 Output.WriteLine(item.LookDescription);
             }
+
+            foreach (Enemy enemy in Player.CurrentRoom.Enemies)
+            {
+                Output.WriteLine(enemy.LookDescription);
+            }
         }
 
         private void Take(string itemName)
