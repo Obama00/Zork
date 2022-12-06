@@ -7,6 +7,7 @@ namespace Zork.Common
 {
     public class World
     {
+
         public Room[] Rooms { get; }
 
         [JsonIgnore]
@@ -50,6 +51,7 @@ namespace Zork.Common
         [OnDeserialized]
         private void OnDeserialized(StreamingContext streamingContext)
         {
+            
             foreach (Room room in Rooms)
             {
                 room.UpdateNeighbors(this);

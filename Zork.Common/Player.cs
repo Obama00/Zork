@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Zork.Common
 {
@@ -18,6 +19,7 @@ namespace Zork.Common
                 {
                     _currentRoom = value;
                     LocationChanged?.Invoke(this, _currentRoom);
+                    
                 }
             }
         }
@@ -44,6 +46,14 @@ namespace Zork.Common
             {
                 CurrentRoom = neighbor;
                 UpdateMoves();
+                if (CurrentRoom.Enemies != null)
+                {
+                    EnimiesAreInTheRoom = true;
+                }
+                if (CurrentRoom.Enemies == null)
+                {
+                    EnimiesAreInTheRoom = false;
+                }
             }
 
             return didMove;
@@ -78,11 +88,26 @@ namespace Zork.Common
 
         public void UpdateMoves()
         {
+           
 
             Moves = Moves + 1;
 
             MovesChanged?.Invoke(this, Moves);
+            if (EnimiesAreInTheRoom == true)
+            {
+                foreach (Enemy enemy in CurrentRoom.Enemies)
+                {
+                    TakeDamage(enemy);
+                }
 
+            }
+        }
+        void TakeDamage(Enemy enemy)
+        {
+            Health = Health - 1;
+            AttackingEnemy = enemy;
+            PlayerAttacked = true;
+           
         }
 
         private readonly World _world;
@@ -91,5 +116,9 @@ namespace Zork.Common
         public int Score = 0;
         public int Moves = 0;
         public int Health = 10;
+        public Enemy AttackingEnemy;
+        public bool PlayerAttacked;
+        public bool EnimiesAreInTheRoom;
+        
     }
 }

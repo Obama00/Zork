@@ -22,6 +22,7 @@
         I = Inventory,
         Reward,
         Score,
+        Attack,
         Unknown
     }
 }

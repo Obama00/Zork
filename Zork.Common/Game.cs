@@ -6,11 +6,13 @@ namespace Zork.Common
 {
     public class Game
     {
-        public World World { get; }
+        public World World { get; set; }
 
         [JsonIgnore]
-        public Player Player { get; }
+        public Player Player { get; set; }
 
+        [JsonIgnore]
+        public Enemy Enemy { get; set; }
         [JsonIgnore]
         public IInputService Input { get; private set; }
 
@@ -24,18 +26,27 @@ namespace Zork.Common
         {
             World = world;
             Player = new Player(World, startingLocation);
+        
+        
         }
 
-        public void Run(IInputService input, IOutputService output)
+        public void Run(IInputService input, IOutputService output )
         {
             Input = input ?? throw new ArgumentNullException(nameof(input));
             Output = output ?? throw new ArgumentNullException(nameof(output));
+            
 
             IsRunning = true;
             Input.InputReceived += OnInputReceived;
+            
+
             Output.WriteLine("Welcome to Zork!");
             Look();
             Output.WriteLine($"\n{Player.CurrentRoom}");
+            
+
+
+
         }
 
         public void OnInputReceived(object sender, string inputString)
@@ -100,6 +111,18 @@ namespace Zork.Common
                     }
                     break;
 
+                case Commands.Attack:
+                    if (string.IsNullOrEmpty(subject))
+                    {
+                        Output.WriteLine("This command requires a target");
+                    }
+                    else
+                    {
+                        Attack(subject);
+                        Player.UpdateMoves();
+                    }
+                    break;
+
                 case Commands.Drop:
                     if (string.IsNullOrEmpty(subject))
                     {
@@ -146,6 +169,11 @@ namespace Zork.Common
             }
 
             Output.WriteLine($"\n{Player.CurrentRoom}");
+
+            if (Player.PlayerAttacked == true)
+            {
+                Attacked();
+            }
         }
         
         private void Look()
@@ -177,6 +205,26 @@ namespace Zork.Common
             }
         }
 
+        private void Attack(string enemyName)
+        {
+            Enemy enemyToAttack = Player.CurrentRoom.Enemies.FirstOrDefault(enemy => string.Compare(enemy.Name, enemyName, ignoreCase: true) == 0);
+            if (enemyToAttack == null)
+            {
+                Output.WriteLine("You can't see any such thing.");
+            }
+            else
+            {
+                enemyToAttack.TakeDamage(1);
+                Output.WriteLine($"You attacked the {enemyToAttack.Name}!");
+                if (enemyToAttack.Health <= 0)
+                {
+                    Output.WriteLine($"You defeated the {enemyToAttack.Name}!");
+                    Player.CurrentRoom.RemoveEnemyFromRoom(enemyToAttack);
+                }
+            }
+        }
+
+       
         private void Drop(string itemName)
         {
             Item itemToDrop = Player.Inventory.FirstOrDefault(item => string.Compare(item.Name, itemName, ignoreCase: true) == 0);
@@ -192,6 +240,11 @@ namespace Zork.Common
             }
         }
 
+        private void Attacked()
+        {
+            Output.WriteLine($"A {Player.AttackingEnemy.Name} attacked you!");
+            Player.PlayerAttacked = false;
+        }
         private static Commands ToCommand(string commandString) => Enum.TryParse(commandString, true, out Commands result) ? result : Commands.Unknown;
     }
 }

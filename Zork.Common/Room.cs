@@ -27,7 +27,7 @@ namespace Zork.Common
         private string[] InventoryNames { get; set; }
 
         [JsonProperty]
-        private string[] EnemyNames { get; set; }
+        public string[] EnemyNames { get; set; }
 
         public Room(string name, string description, Dictionary<Directions, string> neighborNames, string[] inventoryNames, string[] enemyNames)
         {
@@ -88,6 +88,7 @@ namespace Zork.Common
             foreach (var enemyName in EnemyNames)
             {
                 _enemies.Add(world.EnemiesByName[enemyName]);
+
             }
 
             EnemyNames = null;
@@ -108,6 +109,14 @@ namespace Zork.Common
             if (_inventory.Remove(itemToRemove) == false)
             {
                 throw new Exception("Could not remove item from inventory.");
+            }
+        }
+
+        public void RemoveEnemyFromRoom(Enemy enemyToRemove)
+        {
+            if (_enemies.Remove(enemyToRemove) == false)
+            {
+                throw new Exception("Could not remove enemy from room.");
             }
         }
 

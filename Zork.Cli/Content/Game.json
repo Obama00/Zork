@@ -5,7 +5,10 @@
        {
          "Name": "Goblin",
          "LookDescription": "A goblin stands here ready to battle you.",
-         "Health": 1,
+         "Health": 2,
+         
+         "CurrentRoom": "Forest 1",
+         
        }
     ],
     "Items": [
