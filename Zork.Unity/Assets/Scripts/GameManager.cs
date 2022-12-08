@@ -11,6 +11,9 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI ScoreText;
 
     [SerializeField]
+    private TextMeshProUGUI HealthText;
+
+    [SerializeField]
     private TextMeshProUGUI MovesText;
 
     [SerializeField]
@@ -26,6 +29,7 @@ public class GameManager : MonoBehaviour
        _game.Run(InputService, OutputService);
        _game.Player.ScoreChanged += Player_ScoreChanged;
        _game.Player.MovesChanged += Player_MovesChanged;
+        _game.Player.HealthChanged += Player_HealthChanged;
         
     }
 
@@ -45,6 +49,13 @@ public class GameManager : MonoBehaviour
     {
        string movetext = Moves.ToString();
         MovesText.text = movetext;
+        
+    }
+
+      private void Player_HealthChanged(object sender, int Health)
+    {
+       string healthtext = Health.ToString();
+        HealthText.text = healthtext;
         
     }
 

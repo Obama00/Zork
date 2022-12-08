@@ -9,6 +9,7 @@ namespace Zork.Common
         public event EventHandler<Room> LocationChanged;
         public event EventHandler<int> ScoreChanged;
         public event EventHandler<int> MovesChanged;
+        public event EventHandler<int> HealthChanged;
 
         public Room CurrentRoom
         {
@@ -121,8 +122,10 @@ namespace Zork.Common
             Health = Health - 1;
             AttackingEnemy = enemy;
             PlayerAttacked = true;
-          
-           
+            HealthChanged?.Invoke(this, Health);
+
+
+
         }
 
         private readonly World _world;
