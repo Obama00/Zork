@@ -50,7 +50,9 @@
           "East": "Behind House",
           "West": "West of House"
         }
+     
       },
+
       {
         "Name": "South of House",
         "Description": "You are facing the south side of a white house. There is no door here, and all the windows are barred.",
@@ -106,6 +108,10 @@
         "IventoryNames": [
           "Leaves"
         ]
+      },
+      {
+            "Name": "Hades",
+        "Description": "You are in the Underworld. You see nothing but fire surrounding you. A shadowy figure aproaches you and chalenges you to a game of Rock Paper Sciscors."  
       }
     ]
   }

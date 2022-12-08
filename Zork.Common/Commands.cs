@@ -23,6 +23,9 @@
         Reward,
         Score,
         Attack,
+        Rock,
+        Paper,
+        Scissors,
         Unknown
     }
 }

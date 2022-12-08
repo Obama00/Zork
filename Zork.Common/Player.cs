@@ -37,6 +37,8 @@ namespace Zork.Common
             }
 
             _inventory = new List<Item>();
+            _world.RoomsByName.TryGetValue("Hades", out Hades);
+            _world.RoomsByName.TryGetValue(startingLocation, out StartingLocation);
         }
 
         public bool Move(Directions direction)
@@ -46,11 +48,11 @@ namespace Zork.Common
             {
                 CurrentRoom = neighbor;
                 UpdateMoves();
-                if (CurrentRoom.Enemies != null)
+                if (CurrentRoom.Enemies.Count() >= 1)
                 {
                     EnimiesAreInTheRoom = true;
                 }
-                if (CurrentRoom.Enemies == null)
+               if (CurrentRoom.Enemies.Count() == 0)
                 {
                     EnimiesAreInTheRoom = false;
                 }
@@ -77,7 +79,7 @@ namespace Zork.Common
             }
         }
 
-        public void Reward()
+        public void RewardGain()
         {
             
             Score = Score + 1;
@@ -86,9 +88,21 @@ namespace Zork.Common
 
         }
 
+        public void RewardLose()
+        {
+
+            Score = Score - 1;
+            if (Score >= 0)
+            {
+                Score = 0;
+            }
+
+            ScoreChanged?.Invoke(this, Score);
+
+        }
         public void UpdateMoves()
         {
-           
+            
 
             Moves = Moves + 1;
 
@@ -107,6 +121,7 @@ namespace Zork.Common
             Health = Health - 1;
             AttackingEnemy = enemy;
             PlayerAttacked = true;
+          
            
         }
 
@@ -115,10 +130,12 @@ namespace Zork.Common
         private readonly List<Item> _inventory;
         public int Score = 0;
         public int Moves = 0;
-        public int Health = 10;
+        public int Health = 1;
         public Enemy AttackingEnemy;
         public bool PlayerAttacked;
         public bool EnimiesAreInTheRoom;
+        public Room Hades;
+        public Room StartingLocation;
         
     }
 }

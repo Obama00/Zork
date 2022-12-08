@@ -93,7 +93,7 @@ namespace Zork.Common
                     Output.WriteLine(Player.Move(direction) ? $"You moved {direction}." : "The way is shut!");
                     break;
                 case Commands.Reward:
-                    Player.Reward();
+                    Player.RewardGain();
                     Player.UpdateMoves();
                     Output.WriteLine("You gained a point");
                     break;
@@ -110,6 +110,41 @@ namespace Zork.Common
                         Player.UpdateMoves();
                     }
                     break;
+                case Commands.Rock:
+                    if (Player.CurrentRoom == Player.Hades)
+                    {
+                        RPS(Commands.Rock);
+                    }
+                    if (Player.CurrentRoom != Player.Hades)
+                    {
+                        Output.WriteLine("This is no time to play silly games");
+                    }
+
+                    break;
+
+                case Commands.Paper:
+                    if (Player.CurrentRoom == Player.Hades)
+                    {
+                        RPS(Commands.Paper);
+                    }
+                    if (Player.CurrentRoom != Player.Hades)
+                    {
+                        Output.WriteLine("This is no time to play silly games");
+                    }
+
+                    break;
+
+                case Commands.Scissors:
+                    if (Player.CurrentRoom == Player.Hades)
+                    {
+                        RPS(Commands.Scissors);
+                    }
+                    if (Player.CurrentRoom != Player.Hades)
+                    {
+                        Output.WriteLine("This is no time to play silly games");
+                    }
+
+                    break;
 
                 case Commands.Attack:
                     if (string.IsNullOrEmpty(subject))
@@ -118,8 +153,8 @@ namespace Zork.Common
                     }
                     else
                     {
-                        Attack(subject);
-                        Player.UpdateMoves();
+                        Attacking(subject);
+                        
                     }
                     break;
 
@@ -163,17 +198,37 @@ namespace Zork.Common
                     break;
             }
 
+            if (Player.PlayerAttacked == true)
+            {
+                Attacked();
+            }
+
+            if (Player.Health == 0)
+            {
+                if (Player.CurrentRoom != Player.Hades)
+                {
+                    Output.WriteLine("You died!");
+                }
+                Player.CurrentRoom = Player.Hades;
+                Player.EnimiesAreInTheRoom = false;
+            }
+           
+            if (Player.Score >= 3)
+            {
+                if (Player.CurrentRoom == Player.Hades)
+                {
+                    Respawn();
+                }
+            }
+
+            Output.WriteLine($"\n{Player.CurrentRoom}");
             if (ReferenceEquals(previousRoom, Player.CurrentRoom) == false)
             {
                 Look();
             }
 
-            Output.WriteLine($"\n{Player.CurrentRoom}");
 
-            if (Player.PlayerAttacked == true)
-            {
-                Attacked();
-            }
+
         }
         
         private void Look()
@@ -205,23 +260,38 @@ namespace Zork.Common
             }
         }
 
-        private void Attack(string enemyName)
+        private void Attacking(string enemyName)
         {
+            Random random = new Random();
             Enemy enemyToAttack = Player.CurrentRoom.Enemies.FirstOrDefault(enemy => string.Compare(enemy.Name, enemyName, ignoreCase: true) == 0);
+            int x = random.Next(0, 100);
             if (enemyToAttack == null)
             {
                 Output.WriteLine("You can't see any such thing.");
             }
             else
-            {
-                enemyToAttack.TakeDamage(1);
-                Output.WriteLine($"You attacked the {enemyToAttack.Name}!");
-                if (enemyToAttack.Health <= 0)
+            { if (x <= 80)
                 {
-                    Output.WriteLine($"You defeated the {enemyToAttack.Name}!");
-                    Player.CurrentRoom.RemoveEnemyFromRoom(enemyToAttack);
+                    enemyToAttack.TakeDamage(1);
+                    Output.WriteLine($"You attacked the {enemyToAttack.Name}!");
+                    if (enemyToAttack.Health <= 0)
+                    {
+                        Output.WriteLine($"You defeated the {enemyToAttack.Name}!");
+                        Player.CurrentRoom.RemoveEnemyFromRoom(enemyToAttack);
+
+                    }
+                }
+              if (x > 80 & x <= 85)
+                {
+                    Output.WriteLine($"You landed a critical hit on {enemyToAttack.Name}");
+                    enemyToAttack.TakeDamage(2);
+                }
+              if (x > 85)
+                {
+                    Output.WriteLine("You missed the attack!");
                 }
             }
+            Player.UpdateMoves();
         }
 
        
@@ -245,6 +315,103 @@ namespace Zork.Common
             Output.WriteLine($"A {Player.AttackingEnemy.Name} attacked you!");
             Player.PlayerAttacked = false;
         }
+
+        private void Respawn()
+        {
+            Output.WriteLine("You have come back to life");
+            Player.CurrentRoom = Player.StartingLocation;
+            Player.Health = 1;
+            Player.Score = 0;
+
+        }
+        private void RPS(Commands command)
+        {
+            Random random = new Random();
+            int x = random.Next(0, 100);
+            if(x <= 34)
+            {
+                Output.WriteLine("The shadowy figure played Scissors");
+                if (command == Commands.Rock)
+                {
+                    Output.WriteLine("You've bested the Shadowy figure");
+                    Player.RewardGain();
+                    Output.WriteLine("You gained a point");
+
+                }
+
+                if (command == Commands.Paper)
+                {
+                    Output.WriteLine("You lost to the shadowy figure");
+                    Player.RewardLose();
+                    Output.WriteLine("You lost a point");
+
+                }
+
+                if (command == Commands.Scissors)
+                {
+                    Output.WriteLine("It was a draw.");
+                    Output.WriteLine("Try again.");
+
+                }
+
+            }
+
+            if (x > 34 & x <= 67)
+            {
+                Output.WriteLine("The shadowy figure played Rock");
+                if (command == Commands.Paper)
+                {
+                    Output.WriteLine("You've bested the Shadowy figure");
+                    Player.RewardGain();
+                    Output.WriteLine("You gained a point");
+
+                }
+
+                if (command == Commands.Scissors)
+                {
+                    Output.WriteLine("You lost to the shadowy figure");
+                    Player.RewardLose();
+                    Output.WriteLine("You lost a point");
+
+                }
+                if (command == Commands.Rock)
+                {
+                    Output.WriteLine("It was a draw.");
+                    Output.WriteLine("Try again.");
+
+                }
+
+            }
+
+            if (x > 67)
+            {
+                Output.WriteLine("The shadowy figure played Paper");
+                if (command == Commands.Scissors)
+                {
+                    Output.WriteLine("You've bested the Shadowy figure");
+                    Player.RewardGain();
+                    Output.WriteLine("You gained a point");
+
+                }
+
+                if (command == Commands.Rock)
+                {
+                    Output.WriteLine("You lost to the shadowy figure");
+                    Player.RewardLose();
+                    Output.WriteLine("You lost a point");
+
+                }
+                if (command == Commands.Paper)
+                {
+                    Output.WriteLine("It was a draw.");
+                    Output.WriteLine("Try again.");
+
+                }
+
+            }
+            Player.UpdateMoves();
+        }
+
         private static Commands ToCommand(string commandString) => Enum.TryParse(commandString, true, out Commands result) ? result : Commands.Unknown;
     }
 }
